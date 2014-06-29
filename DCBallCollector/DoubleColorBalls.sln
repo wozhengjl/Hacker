@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hacker.DoubleColorBalls", "DoubleColorBalls\Hacker.DoubleColorBalls.csproj", "{4E445FBB-83EF-4B85-89DC-EDD9A464012E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internal.Hacker.Math", "Internal.Hacker.Balls.Math\Internal.Hacker.Math.csproj", "{0563938C-F941-4DCE-AA41-234D4E189E66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internal.Hacker.IO", "Internal.Hacker.IO\Internal.Hacker.IO.csproj", "{6E5761D9-C059-4DED-AD05-E4E4D68AE4A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E445FBB-83EF-4B85-89DC-EDD9A464012E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E445FBB-83EF-4B85-89DC-EDD9A464012E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E445FBB-83EF-4B85-89DC-EDD9A464012E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E445FBB-83EF-4B85-89DC-EDD9A464012E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0563938C-F941-4DCE-AA41-234D4E189E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0563938C-F941-4DCE-AA41-234D4E189E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0563938C-F941-4DCE-AA41-234D4E189E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0563938C-F941-4DCE-AA41-234D4E189E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E5761D9-C059-4DED-AD05-E4E4D68AE4A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5761D9-C059-4DED-AD05-E4E4D68AE4A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5761D9-C059-4DED-AD05-E4E4D68AE4A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5761D9-C059-4DED-AD05-E4E4D68AE4A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
