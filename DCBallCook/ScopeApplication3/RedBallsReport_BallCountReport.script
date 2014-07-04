@@ -1,6 +1,8 @@
 ﻿//Script GUID:2fcc26a3-4216-4cb9-acb0-074f8272c505
 //Used for tracking history
 
+USING Double.Color.Ball.Common;
+
 #DECLARE Input_Redball_Path string = @"C:\Users\jianlez\Desktop\data\ballsCombination.log";
 #DECLARE Extract_Redball_View string = @"Schema_RedBall.view";
 #DECLARE Output_1ball_Path string = @"C:\Users\jianlez\Desktop\data\0P\1Ball.log";
@@ -9,6 +11,13 @@
 #DECLARE Output_4ball_Path string = @"C:\Users\jianlez\Desktop\data\0P\4Ball.log";
 #DECLARE Output_5ball_Path string = @"C:\Users\jianlez\Desktop\data\0P\5Ball.log";
 #DECLARE Output_6ball_Path string = @"C:\Users\jianlez\Desktop\data\0P\6Ball.log";
+
+#DECLARE Output_1ballDetail_Path string = @"C:\Users\jianlez\Desktop\data\0P\1BallDetail.log";
+#DECLARE Output_2ballDetail_Path string = @"C:\Users\jianlez\Desktop\data\0P\2BallDetail.log";
+#DECLARE Output_3ballDetail_Path string = @"C:\Users\jianlez\Desktop\data\0P\3BallDetail.log";
+#DECLARE Output_4ballDetail_Path string = @"C:\Users\jianlez\Desktop\data\0P\4BallDetail.log";
+#DECLARE Output_5ballDetail_Path string = @"C:\Users\jianlez\Desktop\data\0P\5BallDetail.log";
+#DECLARE Output_6ballDetail_Path string = @"C:\Users\jianlez\Desktop\data\0P\6BallDetail.log";
 
 
 redBallData = 
@@ -19,92 +28,201 @@ redBallData =
     );
 
 OneBallData = 
-    SELECT RedBalls 
+    SELECT PeriodNo,
+           RedBalls,
+           RedBallsNo
     FROM redBallData
     WHERE RedBalls.Length == 1;
 
-OneBallData = 
+OneBallSummary = 
     SELECT RedBalls,
+           RedBallsNo,
     COUNT() AS OneBallCount
     FROM OneBallData
-    GROUP BY RedBalls
-    ORDER BY OneBallCount DESC;
+    GROUP BY RedBalls,
+             RedBallsNo
+    ORDER BY OneBallCount DESC, RedBalls;
+
+OneBallDetail = 
+    SELECT OneBallData.PeriodNo,
+           OneBallData.RedBalls,
+           OneBallData.RedBallsNo,
+           OneBallSummary.OneBallCount
+    FROM OneBallData
+    LEFT OUTER JOIN OneBallSummary ON
+    OneBallData.RedBalls == OneBallSummary.RedBalls
+    ORDER BY OneBallCount DESC, RedBalls,
+             PeriodNo DESC;
 
 TwoBallData = 
-    SELECT RedBalls 
+    SELECT PeriodNo 
+           ,RedBalls
+           ,RedBallsNo
     FROM redBallData
     WHERE RedBalls.Length == 2;
 
-TwoBallData = 
-    SELECT RedBalls,
+TwoBallSummary = 
+    SELECT RedBalls, RedBallsNo,
     COUNT() AS TwoBallCount
     FROM TwoBallData
-    GROUP BY RedBalls
+    GROUP BY RedBalls,
+             RedBallsNo
     ORDER BY TwoBallCount DESC;
 
+TwoBallDetail =
+    SELECT TwoBallData.PeriodNo,
+           TwoBallData.RedBalls,
+           TwoBallData.RedBallsNo,
+           TwoBallSummary.TwoBallCount
+    FROM TwoBallData
+    LEFT OUTER JOIN TwoBallSummary
+    ON TwoBallData.RedBalls == TwoBallSummary.RedBalls
+    ORDER BY TwoBallCount DESC, RedBalls,
+             PeriodNo DESC;
+
 ThreeBallData = 
-    SELECT RedBalls 
+    SELECT PeriodNo, RedBalls,
+           RedBallsNo 
     FROM redBallData
     WHERE RedBalls.Length == 3;
 
-ThreeBallData = 
+ThreeBallSummary = 
     SELECT RedBalls,
+           RedBallsNo,
            COUNT() AS ThreeBallCount
     FROM ThreeBallData
-    GROUP BY RedBalls
-    ORDER BY ThreeBallCount DESC;
+    GROUP BY RedBalls,
+             RedBallsNo
+    ORDER BY ThreeBallCount DESC, RedBalls;
+
+ThreeBallDetail =
+    SELECT ThreeBallData.PeriodNo,
+           ThreeBallData.RedBalls,
+           ThreeBallData.RedBallsNo,
+           ThreeBallSummary.ThreeBallCount
+    FROM ThreeBallData
+    LEFT OUTER JOIN ThreeBallSummary
+    ON ThreeBallData.RedBalls == ThreeBallSummary.RedBalls
+    ORDER BY ThreeBallCount DESC,
+             RedBalls,
+             PeriodNo DESC;
 
 FourBallData = 
-    SELECT RedBalls 
+    SELECT PeriodNo, RedBalls,
+           RedBallsNo 
     FROM redBallData
     WHERE RedBalls.Length == 4;
 
-FourBallData = 
+FourBallSummary = 
     SELECT RedBalls,
+           RedBallsNo,
            COUNT() AS FourBallCount
     FROM FourBallData
-    GROUP BY RedBalls
-    ORDER BY FourBallCount DESC;
+    GROUP BY RedBalls,
+             RedBallsNo
+    ORDER BY FourBallCount DESC,
+             RedBalls;
+
+FourBallDetail =
+    SELECT FourBallData.PeriodNo,
+           FourBallData.RedBalls,
+           FourBallData.RedBallsNo,
+           FourBallSummary.FourBallCount
+    FROM FourBallData
+    LEFT OUTER JOIN FourBallSummary
+    ON FourBallData.RedBalls == FourBallSummary.RedBalls
+    ORDER BY FourBallCount DESC,
+             RedBalls,
+             PeriodNo DESC;
 
 FiveBallData = 
-    SELECT RedBalls 
+    SELECT PeriodNo, RedBalls,
+           RedBallsNo
     FROM redBallData
     WHERE RedBalls.Length == 5;
 
-FiveBallData = 
+FiveBallSummary = 
     SELECT RedBalls,
+           RedBallsNo,
            COUNT() AS FiveBallCount
     FROM FiveBallData
-    GROUP BY RedBalls
-    ORDER BY FiveBallCount DESC;
+    GROUP BY RedBalls,
+             RedBallsNo
+    ORDER BY FiveBallCount DESC,
+             RedBalls;
+
+FiveBallDetail =
+    SELECT FiveBallData.PeriodNo,
+           FiveBallData.RedBalls,
+           FiveBallData.RedBallsNo,
+           FiveBallSummary.FiveBallCount
+    FROM FiveBallData
+    LEFT OUTER JOIN FiveBallSummary
+    ON FiveBallData.RedBalls == FiveBallSummary.RedBalls
+    ORDER BY FiveBallCount DESC,
+             RedBalls,
+             PeriodNo DESC;
 
 SixBallData = 
-    SELECT RedBalls 
+    SELECT PeriodNo, RedBalls,
+           RedBallsNo
     FROM redBallData
     WHERE RedBalls.Length == 6;
 
-SixBallData = 
+SixBallSummary = 
     SELECT RedBalls,
+           RedBallsNo,
            COUNT() AS SixBallCount
     FROM SixBallData
-    GROUP BY RedBalls
-    ORDER BY SixBallCount DESC;
+    GROUP BY RedBalls,
+             RedBallsNo
+    ORDER BY SixBallCount DESC,
+             RedBalls;
 
+SixBallDetail =
+    SELECT SixBallData.PeriodNo,
+           SixBallData.RedBalls,
+           SixBallData.RedBallsNo,
+           SixBallSummary.SixBallCount
+    FROM SixBallData
+    LEFT OUTER JOIN SixBallSummary
+    ON SixBallData.RedBalls == SixBallSummary.RedBalls
+    ORDER BY SixBallCount DESC,
+             RedBalls,
+             PeriodNo DESC;
 
-OUTPUT OneBallData 
+OUTPUT OneBallSummary
 TO @Output_1ball_Path;
 
-OUTPUT TwoBallData 
+OUTPUT OneBallDetail
+TO @Output_1ballDetail_Path;
+
+OUTPUT TwoBallSummary 
 TO @Output_2ball_Path;
 
-OUTPUT ThreeBallData 
+OUTPUT TwoBallDetail
+TO @Output_2ballDetail_Path;
+
+OUTPUT ThreeBallSummary
 TO @Output_3ball_Path;
 
-OUTPUT FourBallData 
+OUTPUT ThreeBallDetail
+TO @Output_3ballDetail_Path;
+
+OUTPUT FourBallSummary 
 TO @Output_4ball_Path;
 
-OUTPUT FiveBallData 
+OUTPUT FourBallDetail
+TO @Output_4ballDetail_Path;
+
+OUTPUT FiveBallSummary 
 TO @Output_5ball_Path;
 
-OUTPUT SixBallData 
+OUTPUT FiveBallDetail
+TO @Output_5ballDetail_Path;
+
+OUTPUT SixBallSummary 
 TO @Output_6ball_Path;
+
+OUTPUT SixBallDetail
+TO @Output_6ballDetail_Path;

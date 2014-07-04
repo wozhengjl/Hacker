@@ -3,5 +3,6 @@
   <PropertyGroup>
     <CurrentWorkingVC>vc://cosmos11/spo.adhoc</CurrentWorkingVC>
     <StartFile>RedBallsReport_BallCountReport.script</StartFile>
+    <BuildClusterPlanProperty>False</BuildClusterPlanProperty>
   </PropertyGroup>
 </Project>
