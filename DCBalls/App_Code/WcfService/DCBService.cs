@@ -38,5 +38,13 @@
             var model = accountRepository.Read(userName);
             return model != null;
         }
+
+        [OperationContract]
+        //[WebGet]
+        [WebInvoke(Method = "POST")]
+        public void PostOrder(int ordertype, IList<OrderItem> orderdata)
+        {
+
+        }
     }
 }

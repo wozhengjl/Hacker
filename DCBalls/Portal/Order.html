@@ -3,6 +3,7 @@
 <head>
     <title>双色球选号</title>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="./js/jquery.json-2.4.min.js"></script>
     <script src="./js/DCBall.js"></script>
 
     <style type="text/css">
@@ -241,6 +242,27 @@
             text-align: center;
         }
 
+        .orderConfirmDiv {
+            clear: both; 
+            padding: 10px 0 15px;
+        }
+
+        .orderConfirmText {
+            text-align: center; 
+            height: 43px; 
+            line-height: 43px;
+        }
+
+        .orderConfirmBtn {
+            display: inline-block; 
+            width: 146px; 
+            height: 43px; 
+            background: url(./img/order-btn.png) no-repeat; 
+            cursor: pointer; 
+            background-position: 0 -180px; 
+            color: #333;
+        }
+
     </style>
 </head>
 <body>
@@ -257,11 +279,9 @@
         <div id="orderTableContainer">
             <div id="orderTable" class="selectedlist"></div>
         </div>
-        <div style="clear: both; padding: 10px 0 15px;">
-            <p style="text-align: center; height: 43px; line-height: 43px;">
-	            <span id="normalBtnBox">
-                    <a style="display: inline-block; width: 146px; height: 43px; background: url(./img/order-btn.png) no-repeat; cursor: pointer; background-position: 0 -180px; color: #333;" title="立即投注"></a>
-	            </span>
+        <div id="orderConfirmDiv" class="orderConfirmDiv">
+            <p class="orderConfirmText">
+	            <span id="normalBtnBox"></span>
             </p>
         </div>
     </div>
@@ -277,6 +297,7 @@
                  var ulred = $('<ul style="list-style:none">');
                  var ulblue = $('<ul style="list-style:none">');
                  var buttonContainer = $("#buttonContainer");
+                 var orderCrmButtonDiv = $("orderConfirmDiv");
                  var redBalls = [];
                  var blueBalls = [];
                  var isConfirm = false;
@@ -304,6 +325,10 @@
                              redBalls = [];
                              blueBalls = [];
                              isConfirm = false;
+
+                             buttonContainer.find("button").removeClass('enableButton');
+                             buttonContainer.find("button").removeClass('confirmButton');
+                             buttonContainer.find("button").addClass('disableButton');
                          }
                      })
                      .appendTo(buttonContainer);
@@ -389,6 +414,17 @@
 
                  ulred.appendTo(redballsdiv);
                  ulblue.appendTo(blueballsdiv);
+
+                 $('#normalBtnBox').append(
+                     $('<a class="orderConfirmBtn" title="立即投注"></a>').click(function ()
+                     {
+                         var orderData = ordertable.getOrderData();
+                         PostOrder({
+                             type: 1,
+                             data: orderData
+                         });
+                     })
+                 );
              }
          }
 
@@ -399,6 +435,25 @@
          (function ($) {
              $.fn.DCB_Tables = function (options) {
                  var editRowNo = -1;
+
+                 this.getOrderData = function ()
+                 {
+                     var orderData = [];
+
+                     table.find('dt').each(function () {
+                         var redballs = $(this).find("#redballs").eq(0).text();
+                         var blueballs = $(this).find("#blueballs").eq(0).text();
+                         var count = $(this).find(".counterText").eq(0).val();
+                         var orderitem = {
+                             OrderData: [redballs, blueballs].join(";"),
+                             Count:count,
+                         }
+
+                         orderData.push(orderitem);
+                     });
+
+                     return orderData;
+                 }
 
                  this.addRow = function (redballs, blueballs) {
                      if (editRowNo != -1) {

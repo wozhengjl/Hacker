@@ -64,7 +64,7 @@
             }
 
             var row = table.Rows[0];
-            return new AccountModel { TenantName = row[AccountTableConstants.TenantName].ToString() };
+            return new AccountModel { TenantName = row[AccountTableConstants.TenantName].ToString(), TenantPassword = row[AccountTableConstants.TenantPassword].ToString() };
         }
     }
 }

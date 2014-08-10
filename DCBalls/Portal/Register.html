@@ -148,6 +148,7 @@
             
             function InitialPage() {
                 var verifyCode;
+                var isNameValidated = true;
 
                 function UpdateVerifyCode(code) 
                 {
@@ -157,8 +158,9 @@
                 function ValidateUserName(userName)
                 {
                     if (userName == "邮箱/用户名/手机号") {
+                        isNameValidated = false;
+                        $("#accountIndicator").text("用户名为空");
                         $("#accountIndicator").show();
-                        return false;
                     }
                     else
                     {
@@ -168,18 +170,22 @@
                             callback: function (isExist)
                             {
                                 if (isExist) {
+                                    isNameValidated = false;
+                                    $("#accountIndicator").text("用户名已被占用");
                                     $("#accountIndicator").show();
                                 }
                                 else
                                 {
+                                    isNameValidated = true;
                                     $("#accountIndicator").hide();
                                 }
                             },
                         });
+
+                        $("#accountIndicator").hide();
                     }
 
-                    $("#accountIndicator").hide();
-                    return true;
+                    return isNameValidated;
                 }
 
                 var accountName = $("#account-name");
@@ -294,7 +300,8 @@
                                 var validated = ValidateUserName($("#accountName").val())
                                                 && ValidatePassword($("#passWord").val())
                                                 && ValidatePasswordConfirmed($("#passWordConfirm").val())
-                                                && ValidateVerifyCode();
+                                                && ValidateVerifyCode()
+                                                && isNameValidated;
 
                                 return validated;
                             }))

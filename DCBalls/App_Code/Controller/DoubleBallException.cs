@@ -30,4 +30,12 @@
         { 
         }
     }
+
+    public class AuthenticationDoubleBallException : DoubleBallException
+    {
+        public AuthenticationDoubleBallException(string messgae)
+            : base(messgae)
+        {
+        }
+    }
 }

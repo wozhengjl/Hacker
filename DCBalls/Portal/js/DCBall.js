@@ -1,7 +1,7 @@
 ﻿//Common js/jquery function for Double color ball 
+var preUrl = "http://localhost:61872";
 
 function VerifyCode_Load(options) {
-    var preUrl = "http://localhost:61872";
     var url = preUrl + '/DCBService.svc/GetVerifyCode?' + options.filter;
 
     $.ajax({
@@ -18,7 +18,6 @@ function VerifyCode_Load(options) {
 }
 
 function VerifyUserName(options) {
-    var preUrl = "http://localhost:61872";
     var url = preUrl + '/DCBService.svc/CheckIfUserNameExist';
 
     $.ajax({
@@ -34,6 +33,28 @@ function VerifyUserName(options) {
     });
 }
 
+function PostOrder(options) {
+    //var url = preUrl + '/Portal/handler/OrderHandler.ashx';
+    var url = preUrl + '/DCBService.svc/PostOrder';
+
+    var params = {
+        ordertype:options.type,
+        orderdata:options.data,
+    };
+
+    params = $.toJSON(params);
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        url: url,
+        data: params,
+        success: function (result) {
+            result = result.d;
+        }
+    });
+}
 
 (function ($) {
     $.DCB_Tip = function () {
