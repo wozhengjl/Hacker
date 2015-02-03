@@ -22,7 +22,14 @@ public class Factory<T>
         {
             if (string.Compare(key, "Identity") != 0)
             {
-                typeof(T).GetProperty(key).SetValue(model, Convert.ChangeType(options[key], typeof(T).GetProperty(key).PropertyType));
+                if(typeof(T).GetProperty(key).PropertyType.FullName == "System.Guid" )
+                {
+                    typeof(T).GetProperty(key).SetValue(model, (Guid.Parse(options[key])));
+                }
+                else
+                {
+                    typeof(T).GetProperty(key).SetValue(model, Convert.ChangeType(options[key], typeof(T).GetProperty(key).PropertyType));
+                }
             }
         }
 

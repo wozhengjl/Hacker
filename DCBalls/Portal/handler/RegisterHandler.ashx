@@ -7,10 +7,10 @@ namespace DoubleColor.Redballs.Handler
     using System.Collections.Generic;
     using DoubleColor.Redballs.Repository;
     using System.Web.SessionState;
+    using DoubleColor.Redballs.Common;
 
     public class RegisterHandler : IHttpHandler, IRequiresSessionState
-    {
-
+    {    
         public void ProcessRequest(HttpContext context)
         {
             var requestForm = context.Request.Form;
@@ -30,6 +30,10 @@ namespace DoubleColor.Redballs.Handler
                 
                 var accountRepository = new AccountRepository();
                 accountRepository.Create(parameters);
+
+                
+                context.Session["IsAuthenticated"] = true;
+                context.Response.Redirect("..\\Order.html");
             }
             catch (Exception e)
             {

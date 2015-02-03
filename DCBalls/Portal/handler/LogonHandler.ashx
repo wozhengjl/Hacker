@@ -6,6 +6,7 @@ namespace DoubleColor.Redballs.Handler
     using System.Web;
     using System.Collections.Generic;
     using DoubleColor.Redballs.Repository;
+    using DoubleColor.Redballs.Common;
     using System.Web.SessionState;
 
     public class LogonHandler : IHttpHandler, IRequiresSessionState
@@ -25,6 +26,7 @@ namespace DoubleColor.Redballs.Handler
                 if (string.Equals(requestForm["passWord"], account.TenantPassword))
                 {
                     context.Session["IsAuthenticated"] = true;
+                    CookieHelper.SetUpCookies(requestForm["accountName"], requestForm["passWord"]);
                     context.Response.Redirect("..\\Order.html");
                 }
                 else

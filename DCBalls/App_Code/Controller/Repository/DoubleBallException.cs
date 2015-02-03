@@ -15,6 +15,7 @@
         }
     }
 
+
     public class IdentityExistDoubleBallException : DoubleBallException
     {
         public IdentityExistDoubleBallException(string messgae)

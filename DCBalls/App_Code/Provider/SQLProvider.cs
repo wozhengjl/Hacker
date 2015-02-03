@@ -50,10 +50,6 @@
                 {
                     throw ex;
                 }
-                finally
-                {
-                    connection.Close();
-                }
             }
         }
     }

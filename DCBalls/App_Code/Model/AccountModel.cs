@@ -11,8 +11,6 @@
     /// </summary>
     public class AccountModel : Model
     {
-        private Guid tenantGuid;
-
         private string tenantName;
 
         private string tenantPasswrod;

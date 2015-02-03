@@ -1,13 +1,16 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>登陆</title>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="./master/NavigationBar.master" Title="注册-个人用户" CodeFile="Register.aspx.cs" Inherits="DoubleColor.Redballs.Portal.Register" %>
+
+<asp:Content id="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="./css/DCBall.css" rel="stylesheet" type="text/css" />
 
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="./js/DCBall.js"></script>
 
     <style type="text/css">
+        body {
+            background-color:#f2f2f2;
+        }
+        
         .header-fix {
             background: #4d545d;
             border-top: 0 solid #4d5765;
@@ -37,13 +40,13 @@
             line-height: 30px;
             float: right;
         }
-        .logonform {
+        .form {
             width:700px;
             margin-top:100px;
             margin-bottom:auto;
             margin-right: auto; 
             margin-left: auto;
-            height:240px;
+            height:380px;
             background:#FFF;
         }
         .item {
@@ -100,7 +103,7 @@
             color:#F00;
         }
         
-        .btn-logon{
+        .btn-regist{
             width:270px;
             height:40px;
             color:#FFF;
@@ -109,16 +112,21 @@
             text-indent:-9999px;
             font-weight:800;
             overflow:hidden;
-            background:url(img/login-all-bg.png) no-repeat -20px -61px;
+            background:url(img/regist-btn.jpg) no-repeat;
         }
     </style>
-</head>
-<body style="background-color:#f2f2f2">
-    <form id="form1" class="logonform" action="handler/LogonHandler.ashx" method="post" >
+</asp:Content>
+
+<asp:Content id="Content2" ContentPlaceHolderID="ContentPlaceHolder2" runat="server">
+    <form id="form1" class="form" action="Register.aspx" method="post" >
         <div id="formdiv" style="padding:20px 20px 20px 20px">
             <div id="account-name" class="item"></div>
 
             <div id="account-password" class="item"></div>
+
+            <div id="password-confirmed" class="item"></div>
+
+            <div id="verification-code" class="item"></div>
 
             <div id="div-registerbutton" class="item"></div>
         </div>
@@ -130,17 +138,40 @@
             InitialPage();
 
             function InitialPage() {
+                var verifyCode;
+                var isNameValidated = true;
+
+                function UpdateVerifyCode(code) {
+                    verifyCode = code;
+                }
+
                 function ValidateUserName(userName) {
                     if (userName == "邮箱/用户名/手机号") {
                         isNameValidated = false;
                         $("#accountIndicator").text("用户名为空");
                         $("#accountIndicator").show();
-                        return false;
                     }
                     else {
+                        VerifyUserName(
+                        {
+                            UserName: userName,
+                            callback: function (isExist) {
+                                if (isExist) {
+                                    isNameValidated = false;
+                                    $("#accountIndicator").text("用户名已被占用");
+                                    $("#accountIndicator").show();
+                                }
+                                else {
+                                    isNameValidated = true;
+                                    $("#accountIndicator").hide();
+                                }
+                            },
+                        });
+
                         $("#accountIndicator").hide();
-                        return true;
                     }
+
+                    return isNameValidated;
                 }
 
                 var accountName = $("#account-name");
@@ -178,7 +209,7 @@
                 }
 
                 var accountPwd = $("#account-password");
-                $('<span class="label"></span>').append('<b class="textcolor">*</b>').append('密码：').appendTo(accountPwd);
+                $('<span class="label"></span>').append('<b class="textcolor">*</b>').append('请设置密码：').appendTo(accountPwd);
                 $('<div class="inputdiv"></div>')
                     .append(
                         $('<input type="password" id="passWord" name="passWord" class="text" />')
@@ -200,23 +231,81 @@
                     return true;
                 }
 
-                var logonBtn = $("#div-registerbutton");
-                $('<span class="label"></span>').appendTo(logonBtn);
+                var accountPwdConfrm = $("#password-confirmed");
+                $('<span class="label"></span>').append('<b class="textcolor">*</b>').append('确认密码：').appendTo(accountPwdConfrm);
+                $('<div class="inputdiv"></div>').append(
+                    $('<input type="password" id="passWordConfirm" class="text" />')
+                         .attr('title', "请再次输入密码")
+                        .addClass('dcbtip')
+                        .blur(function () {
+                            ValidatePasswordConfirmed(this.value);
+                        }))
+                 .append($('<label id="pwdConfirmIndicator" class="errortext" style="display:none" >两次输入密码不一致</label>'))
+                 .appendTo(accountPwdConfrm);
+
+                function ValidateVerifyCode() {
+                    if (verifyCode && $("#vercode").val()
+                                   && verifyCode == $("#vercode").val()) {
+                        return true;
+                    }
+
+                    alert("验证码不匹配");
+                    return false;
+                }
+
+                var vryficationCode = $("#verification-code");
+                $('<span class="label"></span>').append('<b class="textcolor">*</b>').append('验证码：').appendTo(vryficationCode);
+                $('<div class="inputdiv"></div>').append('<input type="text" id="vercode" name="vercode" class="text text-1" />')
+                    .append($('<label style="margin-left:20px"></label>').append(
+                        $('<img id="vercodeimage" src="#" />').click(function () {
+                            getVryCodeImg(UpdateVerifyCode);
+                        })
+                    ))
+                    .append($('<div id="vrfycoderefreshdiv" style="margin-left:40px; display:inline-block"></div>')
+                        .append($('<label style="color:#999;font-size:15px"></label>').append('看不清？')
+                        .append($('<a href="#" style="color:#005aa0"></a>')
+                            .click(function () {
+                                getVryCodeImg(UpdateVerifyCode);
+                            })
+                            .text("换一张")
+                        )))
+                .appendTo(vryficationCode);
+
+                var registerBtn = $("#div-registerbutton");
+                $('<span class="label"> </span>').appendTo(registerBtn);
                 $('<div class="inputdiv"></div>')
-                    .append($('<input type="submit" id="registerbutton" value="登陆" class="btn-logon" />')
+                    .append($('<input type="submit" id="registerbutton" value="立即注册" class="btn-regist" />')
                             .click(function () {
                                 var validated = ValidateUserName($("#accountName").val())
-                                                && ValidatePassword($("#passWord").val());
+                                                && ValidatePassword($("#passWord").val())
+                                                && ValidatePasswordConfirmed($("#passWordConfirm").val())
+                                                && ValidateVerifyCode()
+                                                && isNameValidated;
 
                                 return validated;
                             }))
-                .appendTo(logonBtn);
-            };
-        }
+                .appendTo(registerBtn);
+
+                getVryCodeImg(UpdateVerifyCode);
+
+                $.DCB_Tip();
+            }
+
+            function getVryCodeImg(callback) {
+                var numkey = Math.random();
+                numkey = Math.round(numkey * 10000);
+                VerifyCode_Load({
+                    filter: "height=35&width=70&k=" + numkey,
+                    callback: function (VerifyCodeSource) {
+                        $("#vercodeimage").attr('src', VerifyCodeSource.Base64Image);
+                        callback(VerifyCodeSource.VerifyCode);
+                    }
+                });
+            }
+        };
 
         $(document).ready(function () {
             Register.RenderPage();
         });
     </script>
-</body>
-</html>
+</asp:Content>

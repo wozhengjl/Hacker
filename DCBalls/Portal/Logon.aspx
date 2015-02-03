@@ -1,41 +1,12 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>登陆</title>
-    <link href="./css/DCBall.css" rel="stylesheet" type="text/css" />
+﻿<%@ Page Language="C#" MasterPageFile="./master/NavigationBar.master" Title="登陆" AutoEventWireup="true" CodeFile="Logon.aspx.cs" Inherits="DoubleColor.Redballs.Portal.Logon" %>
 
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<asp:Content id="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <link href="./css/DCBall.css" rel="stylesheet" type="text/css" />
     <script src="./js/DCBall.js"></script>
 
-    <style type="text/css">
-        .header-fix {
-            background: #4d545d;
-            border-top: 0 solid #4d5765;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            height: 33px;
-            box-shadow: 0 3px 3px rgba(67,76,89,0.4);
-        }
-
-        .logo {
-            position:fixed;
-            top:2px;
-        }
-        .header {
-            margin-right: auto;
-            margin-left: auto;
-            clear: both;
-            width: 960px;
-            height: 46px;
-            margin: 0 auto;
-            zoom: 1;
-        }
-        .custom-header {
-            height: 30px;
-            line-height: 30px;
-            float: right;
+        <style type="text/css">
+        body{
+            background:#f2f2f2;
         }
         .logonform {
             width:700px;
@@ -112,9 +83,10 @@
             background:url(img/login-all-bg.png) no-repeat -20px -61px;
         }
     </style>
-</head>
-<body style="background-color:#f2f2f2">
-    <form id="form1" class="logonform" action="handler/LogonHandler.ashx" method="post" >
+</asp:Content>
+
+<asp:Content id="ContentPlaceHolder2" ContentPlaceHolderID="ContentPlaceHolder2" runat="server">
+    <form id="form1" class="logonform" action="Logon.aspx" method="post" >
         <div id="formdiv" style="padding:20px 20px 20px 20px">
             <div id="account-name" class="item"></div>
 
@@ -123,6 +95,7 @@
             <div id="div-registerbutton" class="item"></div>
         </div>
     </form>
+
     <script>
         Register = new Object();
 
@@ -201,7 +174,7 @@
                 }
 
                 var logonBtn = $("#div-registerbutton");
-                $('<span class="label"></span>').appendTo(logonBtn);
+                $('<span class="label"> </span>').appendTo(logonBtn);
                 $('<div class="inputdiv"></div>')
                     .append($('<input type="submit" id="registerbutton" value="登陆" class="btn-logon" />')
                             .click(function () {
@@ -218,5 +191,4 @@
             Register.RenderPage();
         });
     </script>
-</body>
-</html>
+</asp:Content>

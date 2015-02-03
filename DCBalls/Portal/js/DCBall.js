@@ -33,25 +33,71 @@ function VerifyUserName(options) {
     });
 }
 
-function PostOrder(options) {
-    //var url = preUrl + '/Portal/handler/OrderHandler.ashx';
-    var url = preUrl + '/DCBService.svc/PostOrder';
-
+function GetRecords(options) {
+    var url = preUrl + '/DCBService.svc/GetRecords';
     var params = {
-        ordertype:options.type,
-        orderdata:options.data,
+        startDate: options.startDate, 
+        endDate: options.endDate,
+        state: options.state,
     };
-
-    params = $.toJSON(params);
 
     $.ajax({
         type: "POST",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         url: url,
-        data: params,
+        data: $.toJSON(params),
         success: function (result) {
             result = result.d;
+            if (result.Result.Error != null) {
+                options.failsCallback();
+            }
+            else {
+                options.succeedCallBack();
+            }
+        }
+    });
+}
+
+function AuthenticateUser(options) {
+    var url = preUrl + '/DCBService.svc/AuthenticateUser';
+    var params = {
+        userName: options.userName,
+        passWord: options.passWord,
+    };
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        url: url,
+        data: $.toJSON(params),
+        success: function (result) {
+            result = result.d;
+            if (result.Result.IsAuthenticate) {
+                options.succeedCallBack();
+            }
+            else {
+                options.failsCallback();
+            }
+        }
+    });
+}
+
+function PostOrder(options) {
+    var url = preUrl + '/Portal/Order.aspx';
+
+    var params = {
+        ordertype:options.type,
+        orderdata: $.toJSON(options.data),
+    };
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: params,
+        success: function (result) {
+            options.succeedCallback();
         }
     });
 }

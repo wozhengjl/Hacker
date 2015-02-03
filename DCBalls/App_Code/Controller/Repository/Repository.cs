@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
+    using DoubleColor.Redballs.Accessor;
     using DoubleColor.Redballs.Model;
 
     /// <summary>
@@ -16,5 +17,9 @@
         public abstract void Create(Dictionary<string, string> parameters);
 
         public abstract T Read(string identity);
+
+        public abstract IList<T> ReadList(string filter);
+
+        protected Accessor<T> Accessor { get; set; }
     }
 }

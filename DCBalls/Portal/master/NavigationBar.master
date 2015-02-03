@@ -1,0 +1,77 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="NavigationBar.master.cs" Inherits="DoubleColor.Redballs.Portal.NavigationBar" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="/Portal/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="/Portal/bootstrap/js/bootstrap.min.js"></script>
+    <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body >
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="Navbar">
+      <ul id="MasterLogon" class="nav navbar-nav">
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的订单 <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">投注记录</a></li>
+            <li class="divider"></li>
+            <li><a href="#">充值</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    <form runat="server">
+        <asp:HiddenField id="HiddenUserName" runat="server">       
+        </asp:HiddenField>
+    </form>
+    <asp:ContentPlaceHolder id="ContentPlaceHolder2" runat="server">       
+    </asp:ContentPlaceHolder>
+
+    <script>
+        Master = new Object();
+        Master.UpdateUI = function () {
+            var uName = $("#HiddenUserName").val();
+            $('#MasterLogon').empty();
+            if (uName) {
+                $('<li></li>').append(
+                    $('<a>' + uName +'</a>'))
+                .appendTo($('#MasterLogon'));
+
+                $('<li></li>').append(
+                    $('<a href="/Portal/Logout.aspx">退出</a>'))
+                .appendTo($('#MasterLogon'));
+            }
+            else {
+                $('<li></li>').append(
+                    $('<a href="/Portal/Logon.aspx">登陆</a>'))
+                .appendTo($('#MasterLogon'));
+
+                $('<li></li>').append(
+                    $('<a href="/Portal/Register.aspx">注册</a>'))
+                .appendTo($('#MasterLogon'));
+            }
+        }
+
+        Master.IsLogin = function () {
+            var uName = $("#HiddenUserName").val();
+            return uName ? true : false;
+        }
+
+        Master.UpdateUserName = function (userName) {
+            $("#HiddenUserName").val(userName);
+        }
+
+        Master.UpdateUI();
+    </script>
+</body>
+</html>

@@ -4,21 +4,20 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Web;
     using DoubleColor.Redballs.Accessor;
     using DoubleColor.Redballs.Model;
-    using AccountTableConstants = DoubleColor.Redballs.Repository.Constants.AccountTableConstants;
+    using AccountTableConstants = DoubleColor.Redballs.Common.Constants.AccountConstants;
 
     /// <summary>
     /// Summary description for Repository
     /// </summary>
     public class AccountRepository : Repository<AccountModel>
     {
-        Accessor<AccountModel> accountAccessor;
-
         public AccountRepository()
         {
-            accountAccessor = new AccountAccessor();
+            Accessor = new AccountAccessor();
         }
 
         protected override void Validate(Dictionary<string, string> parameters, bool exist)
@@ -30,7 +29,7 @@
                 throw new ArgumentException("Identity is null or empty");
             }
 
-            if (accountAccessor.IsExistOrNot(identy, exist))
+            if (Accessor.IsExistOrNot(identy, exist))
             {
                 string errorMsg = "该用户名已经存在";
                 if (exist)
@@ -47,12 +46,17 @@
 
             var factpry = new Factory<AccountModel>();
             var model = factpry.BuildModel(parameters);
-            accountAccessor.Create(model);
+            Accessor.Insert(model);
         }
 
         public override AccountModel Read(string identity)
         {
-            var table = accountAccessor.Read(identity);
+            if (identity == null)
+            {
+                throw new ArgumentException("UserName is null!");
+            }
+
+            var table = this.Accessor.Read(identity);
             
             if (table.Rows.Count < 1)
             {
@@ -64,7 +68,17 @@
             }
 
             var row = table.Rows[0];
-            return new AccountModel { TenantName = row[AccountTableConstants.TenantName].ToString(), TenantPassword = row[AccountTableConstants.TenantPassword].ToString() };
+            return new AccountModel 
+            { 
+                TenantGuid = row[AccountTableConstants.TenantGuid].ToString(),
+                TenantName = row[AccountTableConstants.TenantName].ToString(), 
+                TenantPassword = row[AccountTableConstants.TenantPassword].ToString() 
+            };
+        }
+
+        public override IList<AccountModel> ReadList(string filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }
