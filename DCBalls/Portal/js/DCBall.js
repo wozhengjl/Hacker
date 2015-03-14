@@ -50,10 +50,10 @@ function GetRecords(options) {
         success: function (result) {
             result = result.d;
             if (result.Result.Error != null) {
-                options.failsCallback();
+                options.failCallback();
             }
             else {
-                options.succeedCallBack();
+                options.succeedCallBack(result.Result);
             }
         }
     });
@@ -75,10 +75,10 @@ function AuthenticateUser(options) {
         success: function (result) {
             result = result.d;
             if (result.Result.IsAuthenticate) {
-                options.succeedCallBack();
+                options.succeedCallBack(result);
             }
             else {
-                options.failsCallback();
+                options.failCallback(result);
             }
         }
     });

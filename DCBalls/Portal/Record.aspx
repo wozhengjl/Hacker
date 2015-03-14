@@ -47,10 +47,10 @@
         <table id="recordTable" data-toggle="table" data-url="data1.json" data-cache="false" data-height="299">
             <thead>
                 <tr>
-                    <th data-field="id">彩种</th>
-                    <th data-field="name">投注时间</th>
-                    <th data-field="price">投注金额</th>
-                    <th data-field="state">当前状态</th>
+                    <th data-field="Type">彩种</th>
+                    <th data-field="DateTime">投注时间</th>
+                    <th data-field="Cost">投注金额</th>
+                    <th data-field="State">当前状态</th>
                 </tr>
             </thead>
         </table>

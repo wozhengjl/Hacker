@@ -17,7 +17,7 @@
         {
             if (Request.RequestType.ToUpper() == "POST")
             {
-                if (Convert.ToBoolean(Session["IsAuthenticated"]))
+                if (HttpContext.Current.User != null)
                 {
                     try
                     {

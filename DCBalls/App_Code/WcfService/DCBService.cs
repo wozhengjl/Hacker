@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using System.ServiceModel;
     using System.ServiceModel.Activation;
@@ -15,12 +16,9 @@
     using DoubleColor.Redballs.Model;
     using DoubleColor.Redballs.Repository;
 
-    [ServiceContract(Namespace = "")]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
-    public class DCBService
+    public class DCBService : IDCBService
     {
-        [OperationContract]
-        [WebGet]
         public VerifyCodeItem GetVerifyCode()
         {
             var vrfyCodeHandler = new VerifyCodeHandler();
@@ -32,8 +30,6 @@
             };
         }
 
-        [OperationContract]
-        [WebGet]
         public Boolean CheckIfUserNameExist(string userName)
         {
             var accountRepository = new AccountRepository();
@@ -41,10 +37,6 @@
             return model != null;
         }
 
-        [OperationContract]
-        [WebInvoke(Method = "POST")]
-        [ServiceKnownType(typeof(ServiceResult))]
-        [ServiceKnownType(typeof(RecordModel))]
         public ServiceResult GetRecords(int startDate, int endDate, int state)
         {
             ServiceResult result = new ServiceResult();
@@ -54,16 +46,16 @@
                 var currentAccount = SessionContext.Instance.CurrentAccount;
 
                 StringBuilder filter = new StringBuilder();
-                filter.Append(string.Format("TenantGuid = {0}", currentAccount.TenantGuid));
+                filter.Append(string.Format("TenantGuid = '{0}'", currentAccount.TenantGuid));
                 if (startDate != -1)
                 {
-                    filter.Append(string.Format("DateTime > {0}", DateTime.UtcNow.Date.AddDays(-1 * startDate)));
+                    filter.Append(string.Format(" and DateTime > '{0}'", DateTime.UtcNow.Date.AddDays(-1 * startDate)));
                 }
 
-                filter.Append(string.Format(" and DateTime <= {0}", DateTime.UtcNow.Date.AddDays(-1 * endDate)));
+                filter.Append(string.Format(" and DateTime <= '{0}'", DateTime.UtcNow.Date.AddDays(-1 * endDate)));
 
                 var recordRepository = new RecordRepositoty();
-                IList<RecordModel> records = recordRepository.ReadList(filter.ToString());
+                RecordModel[] records = recordRepository.ReadList(filter.ToString()).ToArray();
                 result.Result = records;
             }
             catch (Exception ex)
@@ -74,10 +66,6 @@
             return result;
         }
 
-        [OperationContract]
-        [WebInvoke(Method = "POST")]
-        [ServiceKnownType(typeof(ServiceResult))]
-        [ServiceKnownType(typeof(AuthenticateUser))]
         public ServiceResult AuthenticateUser(string userName, string passWord)
         {
             ServiceResult result = new ServiceResult();
@@ -93,9 +81,11 @@
                 }
                 if (string.Equals(passWord, account.TenantPassword))
                 {
-                    HttpContext.Current.Session["IsAuthenticated"] = true;
-                    HttpContext.Current.Session["UName"] = userName;
-                    CookieHelper.SetUpCookies(userName, passWord);
+                    UserInfo userinfo = new UserInfo();
+                    userinfo.UserName = userName;
+                    userinfo.GroupId = 2;
+
+                    FormsPrincipal<UserInfo>.SignIn(userName, userinfo, 100);
                     user.IsAuthenticate = true;
                     user.UserName = userName;
                     result.Result = user;
@@ -112,6 +102,20 @@
             }
 
             return result;
+        }
+
+        public static IEnumerable<Type> GetKnownTypes(ICustomAttributeProvider provider)
+        {
+            List<Type> knownTypes = new List<Type>();
+
+            // Add any types to include here.
+            knownTypes.Add(typeof(ServiceResult));
+            knownTypes.Add(typeof(RecordModel));
+            knownTypes.Add(typeof(Model));
+            knownTypes.Add(typeof(AuthenticateUser));
+            knownTypes.Add(typeof(object[]));
+            knownTypes.Add(typeof(RecordModel[]));
+            return knownTypes;
         }
     }
 }

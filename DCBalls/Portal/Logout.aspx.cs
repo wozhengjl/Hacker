@@ -11,8 +11,7 @@
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["IsAuthenticated"] = false;
-            Session["UName"] = "";
+            FormsPrincipal<UserInfo>.SignOff();
             Response.Redirect("/Portal/Logon.aspx");
         }
     }

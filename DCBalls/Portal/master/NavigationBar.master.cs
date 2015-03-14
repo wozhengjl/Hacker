@@ -14,29 +14,17 @@ using System.Web.UI.WebControls;
     { 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Convert.ToBoolean(Session["IsAuthenticated"]) 
-                && Request.FilePath.IndexOf("Logout.aspx") == -1
-                && Request.FilePath.IndexOf("Logon.aspx") == -1
-                && Request.FilePath.IndexOf("Register.aspx") == -1)
+            if (Request.FilePath.IndexOf("Logout.aspx") != -1
+                || Request.FilePath.IndexOf("Logon.aspx") != -1
+                || Request.FilePath.IndexOf("Register.aspx") != -1)
             {
-                HttpCookie Cookie = CookieHelper.GetCookie("UserInfo");
-                if (Cookie != null)
-                {
-                    string userName = Cookie.Values["uName"];
-                    string password = Cookie.Values["uPwd"];
-
-                    var accountRepository = new AccountRepository();
-                    var account = accountRepository.Read(userName);
-
-                    if (account != null && string.Equals(account.TenantPassword, password))
-                    {
-                        Session[Constants.SessionConstants.IsAuthenticated] = true;
-                        Session[Constants.SessionConstants.UName] = userName;
-                    }
-                }
+                HiddenUserName.Value = "";
             }
-
-            HiddenUserName.Value = Session[Constants.SessionConstants.UName] != null ? Session[Constants.SessionConstants.UName].ToString() : "";
+            else
+            {
+                var user = HttpContext.Current.User;
+                HiddenUserName.Value = user != null ? user.Identity.Name : "";
+            }
         }
     }
 }

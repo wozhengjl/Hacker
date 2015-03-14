@@ -10,6 +10,7 @@
     /// Summary description for RecordModel
     /// </summary>
     [DataContract]
+    [KnownType(typeof(RecordModel))]
     public class RecordModel : Model
     {
         [DataMember]

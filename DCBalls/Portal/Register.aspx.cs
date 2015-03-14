@@ -32,9 +32,12 @@
                     var accountRepository = new AccountRepository();
                     accountRepository.Create(parameters);
 
+                    UserInfo userinfo = new UserInfo();
+                    userinfo.UserName = requestForm["accountName"];
+                    userinfo.GroupId = 2;
+                    // 登录状态100分钟内有效
+                    FormsPrincipal<UserInfo>.SignIn(requestForm["accountName"].ToString(), userinfo, 100);
 
-                    Session["IsAuthenticated"] = true;
-                    Session["UName"] = requestForm["accountName"];
                     Response.Redirect("/Portal/Order.aspx");
                 }
                 catch (Exception exception)

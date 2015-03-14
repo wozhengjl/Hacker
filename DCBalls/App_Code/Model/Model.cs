@@ -10,10 +10,8 @@
     /// Summary description for Model
     /// </summary>
     [DataContract]
+    [KnownType(typeof(Model))]
     public class Model
     {
-        public Model()
-        {
-        }
     }
 }

@@ -7,6 +7,7 @@ namespace DoubleColor.Redballs.ItemModel
     using System.Runtime.Serialization;
 
     [DataContract]
+    [KnownType(typeof(ServiceError))]
     public class ServiceError
     {
         public ServiceError(string exception, string message)

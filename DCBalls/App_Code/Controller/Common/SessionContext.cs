@@ -22,12 +22,16 @@
             {
                 if (m_CurrentAccount == null)
                 {
+                    if (HttpContext.Current.User == null)
+                    {
+                        throw new AuthenticationDoubleBallException("用户还未登陆！");
+                    }
                     var accountRepository = new AccountRepository();
-                    var userName = HttpContext.Current.Session["UName"].ToString();
+                    var userName = HttpContext.Current.User.Identity.Name;
                     var account = accountRepository.Read(userName);
                     if (account == null)
                     {
-                        throw new AuthenticationDoubleBallException("用户名不存在");
+                        throw new AuthenticationDoubleBallException("用户名不存在！");
                     }
 
                     m_CurrentAccount = account;
