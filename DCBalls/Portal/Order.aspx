@@ -3,9 +3,7 @@
 <asp:Content id="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="./css/zebra_dialog.css" rel="stylesheet" type="text/css" />
 
-
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <link class="bootstrap library" rel="stylesheet" type="text/css" href="http://sandbox.runjs.cn/js/sandbox/bootstrap-2.2.0/css/bootstrap.min.css" />
+    <link class="bootstrap library" rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
     <script src="./js/jquery.json-2.4.min.js"></script>
     <script src="./js/DCBall.js"></script>
     <script src="./js/zebra_dialog.js"></script>

@@ -75,8 +75,11 @@ namespace Internal.Hacker.IO
                         {
                             var rawItems = rawRecord.Split(',');
 
-                            writer.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8}",
-                                rawItems[0], DateTime.Parse(rawItems[1]).ToString("yyyy-MM-dd"), rawItems[2], rawItems[3], rawItems[4], rawItems[5], rawItems[6], rawItems[7], rawItems[8]));
+                            if (!string.IsNullOrEmpty(rawItems[0]))
+                            {
+                                writer.WriteLine(String.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8}",
+                                    rawItems[0], DateTime.Parse(rawItems[1]).ToString("yyyy-MM-dd"), rawItems[2], rawItems[3], rawItems[4], rawItems[5], rawItems[6], rawItems[7], rawItems[8]));
+                            }
                         }
 
                         rawRecord = rawReader.ReadLine();

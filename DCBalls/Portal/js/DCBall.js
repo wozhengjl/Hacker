@@ -49,7 +49,7 @@ function GetRecords(options) {
         data: $.toJSON(params),
         success: function (result) {
             result = result.d;
-            if (result.Result.Error != null) {
+            if (result.Error != null) {
                 options.failCallback();
             }
             else {

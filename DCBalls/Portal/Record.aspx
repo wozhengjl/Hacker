@@ -1,27 +1,14 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Record.aspx.cs" Inherits="DoubleColor.Redballs.Portal.Record" %>
+﻿<%@ Page Language="C#" MasterPageFile="./master/NavigationBar.master" Title="投注记录" AutoEventWireup="true" CodeFile="Record.aspx.cs" Inherits="DoubleColor.Redballs.Portal.Record" %>
 
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title>投注记录</title>
-    <link href="/Portal/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<asp:Content id="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="/Portal/bootstrap/css/bootstrap-table.css" rel="stylesheet" />
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="./js/jquery.json-2.4.min.js"></script>
-    <script src="/Portal/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/Portal/bootstrap/js/bootstrap-table.min.js"></script>
+    <script src="/Portal/bootstrap/js/bootstrap-table.js"></script>
+    <script src="/Portal/bootstrap/js/bootstrap-table-zh-CN.js"></script>
     <script src="./js/DCBall.js"></script>
-    <style type="text/css">
-        .navcenter
-        {
-            margin-right: auto;
-            padding-left:50px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
+</asp:Content>
+
+<asp:Content id="Content2" ContentPlaceHolderID="ContentPlaceHolder2" runat="server">
+<div id="recordDiv" style="position:relative; margin:50px auto 0px auto; border:solid; width:80%; height:600px;">
     <div>
         <ul id="billtab" class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#">全部记录</a></li>
@@ -44,7 +31,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">投注记录</div>
-        <table id="recordTable" data-toggle="table" data-url="data1.json" data-cache="false" data-height="299">
+        <table id="recordTable">
             <thead>
                 <tr>
                     <th data-field="Type">彩种</th>
@@ -67,9 +54,11 @@
             state: -1,
             succeedCallBack: function(result)
             {
-                $("#recordTable").bootstrapTable('load', result);
+                $("#recordTable").bootstrapTable({
+                    data: result,
+                });
             }
         }); 
     </script>
-</body>
-</html>
+</div>
+</asp:Content>
